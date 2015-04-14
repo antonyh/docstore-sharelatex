@@ -199,6 +199,16 @@ describe "DocManager", ->
 			@MongoManager.updateDoc = sinon.stub().callsArg(3)
 			@MongoManager.upsertIntoDocCollection = sinon.stub().callsArg(4)
 
+		describe "when there is no rev", ->
+			beforeEach ->
+
+				delete @doc.rev
+				@DocManager.getDoc = sinon.stub().callsArgWith(2, null, @doc, @mongoPath)
+				@DocManager.updateDoc @project_id, @doc_id, @newDocLines, @callback	
+
+			it "should set the rev to 0", ->
+				@MongoManager.upsertIntoDocCollection.calledWith(@project_id, @doc_id, @newDocLines, 0).should.equal true
+
 		describe "when the doc lines have changed", ->
 			beforeEach ->
 				@DocManager.getDoc = sinon.stub().callsArgWith(2, null, @doc, @mongoPath)

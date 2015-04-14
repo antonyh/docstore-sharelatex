@@ -40,6 +40,8 @@ module.exports = DocManager =
 				}, "doc lines have not changed"
 				return callback null, false, doc.rev
 			else
+				if !doc.rev?
+					doc.rev = 0
 				logger.log {
 					project_id: project_id
 					doc_id: doc_id,
